@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <link href="face_list.css" type="text/css" rel="stylesheet" />
+    <title>streamer</title>
+    <style></style>
+  </head>
+  <body>
+    <header>
+      <div class="line1 aaa"><p>사용자 목록</p></div>
+    </header>
+    <div>
+      <button type="button" class="mobile-menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <div class="line2 aaa">
+      <input
+        type="image"
+        id="home"
+        src="../../assets/return.png"
+        onclick="location.href='../streamer_main.html'"
+        width="30px"
+        height="30px"
+      />
+    </div>
+    <div class="menuwrap">
+      <nav id="menu">
+        <ul class="category_list">
+          <li class="profile">
+            <div class="card-container">
+              <div class="upper-container">
+                <div class="image-container">
+                  <label for="profile">
+                    <img
+                      id="pic"
+                      src="../../assets/user.png"
+                      style="width: 100%"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="profile"
+                    class="iconnone"
+                    accept="image/*"
+                    onchange="setThumbnail"
+                  />
+                </div>
+              </div>
+              <div class="lower-container">
+                <div>
+                  <p>사용자 이름</p>
+                  <h4>email</h4>
+                </div>
+                <br />
+                <div>
+                  <a href="#" class="btn">View profile</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="menulist">
+            <a class="link_sub_item" href="../picture/face_list.html"
+              >등록된 사용자 목록</a
+            >
+          </li>
+          <li class="menulist">
+            <a class="link_sub_item" href="../video/video_list.html"
+              >모자이크 작업 영상 목록</a
+            >
+          </li>
+          <li class="menulist">
+            <a class="link_sub_item" href="../../choice.html"
+              >시청자 ↔ 스트리머</a
+            >
+          </li>
+          <li class="bottom">
+            <button id="logout" onclick="logout()">로그아웃</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <ul id="itemList">
+      <li>임시사용자1<input type="checkbox" /></li>
+      <li>임시사용자2<input type="checkbox" /></li>
+    </ul>
+    <button id="delete" class="form_btn" onclick="deleteCheckedItems()">
+      사용자 삭제
+    </button>
+
+    <a href="face_up.html">
+      <div class="form_btn">사용자 추가</div>
+    </a>
+
+    <script>
+      function deleteCheckedItems() {
+        var itemList = document.getElementById('itemList');
+        var listItems = itemList.getElementsByTagName('li');
+
+        for (var i = listItems.length - 1; i >= 0; i--) {
+          var checkbox = listItems[i].getElementsByTagName('input')[0];
+
+          if (checkbox.checked) {
+            itemList.removeChild(listItems[i]);
+          }
+        }
+      }
+
+      $(document).ready(function () {
+        if (!('url' in window) && 'webkitURL' in window) {
+          window.URL = window.webkitURL;
+        }
+
+        $('#profile').change(function (e) {
+          $('#pic').attr('src', URL.createObjectURL(e.target.files[0]));
+        });
+      });
+
+      function logout() {
+        location.href = '../../index.html';
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        document
+          .querySelector('.mobile-menu')
+          .addEventListener('click', function (e) {
+            if (document.querySelector('.menuwrap').classList.contains('on')) {
+              //메뉴닫힘
+              document.querySelector('.menuwrap').classList.remove('on');
+              document
+                .querySelector('.mobile-menu i')
+                .classList.remove('fa-times');
+              document.querySelector('.mobile-menu i').classList.add('fa-bars');
+
+              //페이지 스크롤 락 해제
+              document.querySelector('#dimmed').remove();
+            } else {
+              //메뉴펼침
+              document.querySelector('.menuwrap').classList.add('on');
+              document
+                .querySelector('.mobile-menu i')
+                .classList.remove('fa-bars');
+              document
+                .querySelector('.mobile-menu i')
+                .classList.add('fa-times');
+
+              //페이지 스크롤 락 레이어 추가
+              let div = document.createElement('div');
+              div.id = 'dimmed';
+              document.body.append(div);
+
+              //페이지 스크롤 락  모바일 이벤트 차단
+              document
+                .querySelector('#dimmed')
+                .addEventListener(
+                  'scroll touchmove touchend mousewheel',
+                  function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                );
+
+              //페이지 스크롤 락 레이어 클릭 메뉴 닫기
+              document
+                .querySelector('#dimmed')
+                .addEventListener('click', function (e) {
+                  document.querySelector('.mobile-menu').click();
+                });
+            }
+          });
+      });
+      function setThumbnail(event) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          var img = document.createElement('img');
+          img.setAttribute('src', event.target.result);
+          document.querySelector('div#image_container').appendChild(img);
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    </script>
+  </body>
+</html>
