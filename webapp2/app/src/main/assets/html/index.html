@@ -1,0 +1,198 @@
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="index.css" type="text/css" rel="stylesheet" />
+    <title>Ciasom</title>
+    <style></style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="sign-up-container">
+          <form>
+            <br />
+            <div class="userInfoInputDiv">
+              <form action="signup/join" method="POST" id="signup-form">
+                <div class="input-group">
+                  <span class="input-group-addon">아이디</span>
+                  <input
+                    id="signupId"
+                    name="signupId"
+                    type="text"
+                    class="form-control"
+                    placeholder="아이디를 입력하세요."
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon">비밀번호</span>
+                  <input
+                    id="signupPW"
+                    name="signupPW"
+                    type="password"
+                    class="form-control"
+                    placeholder="비밀번호를 입력하세요."
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon">비밀번호 확인</span>
+                  <input
+                    id="signupPWcheck"
+                    name="signupPWcheck"
+                    type="password"
+                    class="form-control"
+                    placeholder="비밀번호 다시 입력하세요."
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon">이메일</span>
+                  <input
+                    id="signupEmail"
+                    name="signupEmail"
+                    type="email"
+                    class="form-control"
+                    placeholder="이메일을 입력하세요."
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <input
+                  type="button"
+                  class="btn btn-primary btn-lg form_btn"
+                  id="btn-submit"
+                  onclick="submit_click();"
+                  value="이메일로 인증코드 보내기"
+                /><br /><br />
+                <form action="verify" method="POST">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                      인증코드</span
+                    >
+                    <input
+                      name="verifyCode"
+                      type="text"
+                      class="form-control"
+                      placeholder="인증코드를 입력하세요."
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                  <br />
+                  <input
+                    id="signcom"
+                    type="submit"
+                    class="btn btn-success btn-lg form_btn"
+                    value="회원가입"
+                  />
+                </form>
+              </form>
+            </div>
+          </form>
+        </div>
+        <div class="sign-in-container">
+          <form action="" method="POST">
+            <span>Ciasom</span>
+            <br />
+            <br />
+            <br />
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">아이디</span>
+              <input
+                type="text"
+                name="loginId"
+                class="form-control"
+                placeholder="아이디를 입력하세요."
+                aria-describedby="basic-addon1"
+              />
+            </div>
+            <br />
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">비밀번호</span>
+              <input
+                type="password"
+                name="loginPW"
+                class="form-control"
+                placeholder="비밀번호를 입력하세요."
+                aria-describedby="basic-addon1"
+              />
+            </div>
+            <br />
+            <input
+              type="submit"
+              class="btn btn-success btn-lg form_btn"
+              onclick="location.href='choice.html'"
+              value="로그인"
+            />
+          </form>
+        </div>
+        <div class="overlay-container">
+          <div class="overlay-left">
+            <button id="signIn" class="overlay_btn">로그인</button>
+          </div>
+          <div class="overlay-right">
+            <span>Wellcome</span>
+            <br />
+            <button id="signUp" class="overlay_btn">회원가입</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const signUpBtn = document.getElementById('signUp');
+      const signInBtn = document.getElementById('signIn');
+      const container = document.querySelector('.container');
+
+      signUpBtn.addEventListener('click', () => {
+        container.classList.add('right-panel-active');
+      });
+      signInBtn.addEventListener('click', () => {
+        container.classList.remove('right-panel-active');
+      });
+
+      function submit_click() {
+        var pw = document.getElementById('signupPW').value;
+        var pwcheck = document.getElementById('signupPWcheck').value;
+        if (pw == pwcheck) {
+          document.getElementById('signup-form').submit();
+        } else {
+          alert('비밀번호가 일치하지 않습니다.');
+          document.getElementById('signupPWcheck').focus();
+        }
+      }
+
+      function dev_click() {
+        var devForm = document.createElement('form');
+        var id = document.getElementById('signupId');
+        var pw = document.getElementById('signupPW');
+        var email = document.getElementById('signupEmail');
+        devForm.method = 'post';
+        devForm.action = 'signup/devJoin';
+        devForm.appendChild(id);
+        devForm.appendChild(pw);
+        devForm.appendChild(email);
+        document.body.appendChild(devForm);
+        devForm.submit();
+      }
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var inputGroups = document.querySelectorAll('.input-group');
+        var abcDiv = document.querySelector('.overlay-container');
+
+        inputGroups.forEach(function (inputGroup) {
+          inputGroup.addEventListener('focusin', function () {
+            abcDiv.style.display = 'none';
+          });
+          inputGroup.addEventListener('focusout', function () {
+            abcDiv.style.display = 'block';
+          });
+        });
+      });
+    </script>
+    <script src="{% static 'js/live.js' %}"></script>
+  </body>
+</html>
